@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   // Enable React Strict Mode
   reactStrictMode: true,
   
   // External packages for server components
-  serverExternalPackages: ['@tailwindcss/typography'],
+  serverExternalPackages: ['@tailwindcss/typography', 'pdf-parse'],
   
   // Configure webpack
   webpack: (config, { isServer }) => {

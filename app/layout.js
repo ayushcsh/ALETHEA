@@ -1,6 +1,7 @@
 import "./globals.css";
 import Sessionwrapper from "./components/sessionwrapper";
 import { ConvexProviderWrapper } from "./components/convexwrapper";
+import { ThemeProvider } from "./components/theme-provider"
 
 // Using system fonts for better reliability and performance
 const fontClass = 'font-sans';
@@ -23,14 +24,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+     <html lang="en" suppressHydrationWarning>
       
       <body className={`${fontClass} antialiased`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
         <ConvexProviderWrapper>
           <Sessionwrapper>
             {children}
           </Sessionwrapper>
         </ConvexProviderWrapper>  
+        </ThemeProvider>
       </body>
      
     </html>

@@ -153,7 +153,7 @@ body {
 /* Custom scrollbar for dark themed scroll area */
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px; /* width of the vertical scrollbar */
+  width: 2px; /* width of the vertical scrollbar */
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -176,3 +176,29 @@ body {
   scrollbar-width: thin;
   scrollbar-color: white black; /* thumb white, track black */
 }
+/* GLOBAL SCROLLBAR */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: black;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 8px;
+  border: 2px solid black;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e5e5e5;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: white black;
+}
+

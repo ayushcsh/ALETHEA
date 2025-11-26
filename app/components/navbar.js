@@ -1,53 +1,117 @@
-'use client'
-import React from 'react'
-import Link from 'next/link'
-import { useSession, signIn, signOut } from "next-auth/react"
+"use client";
+import React, { useState } from "react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import { ModeToggle } from "./theme";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../../components/ui/dropdown-menu'
+} from "../../components/ui/dropdown-menu";
+import RotatingText from "../../components/ui/RotatingText";
+import Image from "next/image";
+import { SparklesCore } from "../../components/ui/sparkles";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  MobileNavHeader,
+  MobileNavMenu,
+  MobileNavToggle,
+  NavbarLogo,
+  NavbarButton,
+} from "../../components/ui/resizable-navbar";
 
-
-function Navbar() {
+function MyNavbar() {
   const { data: session } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const items = [
+    { name: "Home", link: "/#home" },
+    { name: "About", link: "/#about" },
+    { name: "Features", link: "/#features" },
+    { name: "Contact", link: "/#contact" },
+  ];
+
+  // Function to get initials like "AK" from full name
+  const getInitials = (name) => {
+    if (!name) return "";
+    const parts = name.split(" ");
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+  };
 
   return (
-    <>
-      <div className=' relative flex justify-between p-8 z-10 '>
-        <div>
-          <Link href="/">
-            <h1 className='font-bebas  font-bold text-[30px]'>ALETHEA</h1>
-          </Link>
-        </div>
-        <div>
-          {session ? (
-            <div className='bg-black text-[14px] w-auto p-5 text-white border-2 border-[#ff6600]  h-[40px] font-bold w-[180px] rounded-3xl shadow-[0_0_20px_#ff6600] transition-all duration-300 cursor-pointer flex items-center justify-center'>
-              <DropdownMenu >
-                <DropdownMenuTrigger className="border    border-black">{`Welcome ${session.user.name}`}</DropdownMenuTrigger>
-                <DropdownMenuContent className="m-[17%] w-[30px] bg-black border-[#ff6600]">
-                  <button onClick={() => { signOut() }} className='bg-black'>
-                  <DropdownMenuLabel className="bg-black text-white border border-black cursor-pointer  ">Sign out</DropdownMenuLabel>
-                  </button>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+    <Navbar className= "mb-[50px] ">
+      {/* Desktop Navbar */}
+      <NavBody>
+        <NavbarLogo />
+        <NavItems items={items} />
 
+        {session ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              {/* Button that adapts to screen width */}
+              <NavbarButton
+                variant="gradient"
+                className="bg-orange-600 font-bold shadow-[0_0_20px_#ff6600] transition-all duration-300
+                           h-[40px] flex items-center justify-center text-white
+                           px-4 rounded-3xl w-auto sm:w-auto truncate
+                           sm:min-w-[120px] sm:max-w-[180px]"
+                title={session.user.name}
+              >
+                {/* Full name for large screens */}
+                <span className="hidden sm:inline p-2">
+                  Welcome {session.user.name}
+                </span>
 
-          ) : (
-            <Link href="/login">
-              <button className='bg-black text-[14px] text-white border-2 border-[#ff6600] shadow-glow-orange h-[40px] font-bold w-[80px] rounded-3xl shadow-[0_0_20px_#ff6600] transition-all duration-300 cursor-pointer'>
-                Sign in
-              </button>
-            </Link>
-          )}
-        </div>
-      </div>
-    </>
-  )
+                {/* Circle with initials for small screens */}
+                <span className="sm:hidden flex items-center justify-center bg-orange-600 text-white rounded-full w-[40px] h-[40px] font-bold">
+                  {getInitials(session.user.name)}
+                </span>
+              </NavbarButton>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent className="bg-black border border-[#ff6600]">
+              <DropdownMenuItem
+                onClick={() => signOut()}
+                className="text-white cursor-pointer"
+              >
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <NavbarButton
+            href="/login"
+            variant="gradient"
+            className="bg-orange-600"
+          >
+            Sign In
+          </NavbarButton>
+        )}
+      </NavBody>
+
+      {/* Mobile Navbar */}
+      <MobileNav>
+        <MobileNavHeader>
+          <NavbarLogo />
+          <MobileNavToggle isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+        </MobileNavHeader>
+
+        <MobileNavMenu isOpen={isOpen} onClose={() => setIsOpen(false)}>
+          {items.map((item, idx) => (
+            <a key={idx} href={item.link} className="text-lg font-medium">
+              {item.name}
+            </a>
+          ))}
+        </MobileNavMenu>
+      </MobileNav>
+    </Navbar>
+  );
 }
 
-export default Navbar
+export default MyNavbar;

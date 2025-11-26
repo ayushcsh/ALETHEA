@@ -2,30 +2,32 @@
 import Image from "next/image";
 import Link from "next/link";
 import Spline from '@splinetool/react-spline/next';
-import Navbar from "./components/navbar";
+// import Navbar from "./components/navbar";
 import Cards from "./components/cards";
 import Mainpageanimation from "./components/mainpageanimation";
-
-
-
+import CardDemo from "../components/cards-demo-3";
+import MyNavbar from "./components/navbar";
+import AboutPage from "./components/about";
 
 export default function Home() {
+  
   return (
     <>
-      <Navbar/>
-      <div className="home justify-center items-center flex  h-[70vh] w-full  mt-[30px] ">
+     <MyNavbar/>
+      <section id="home"> 
+      <div className="home justify-center items-center flex   h-[44vh] md:h-[80vh] w-full  mt-[30px] ">
+        
         <Mainpageanimation/>
         
-        <div className="w-[50%] mr-[60px] h-[100vh] mt-[50px]"> <Spline
+        {/* <div className="w-[50%] mr-[60px] h-[100vh] mt-[50px] hidden md:block"> <Spline
           scene="https://prod.spline.design/zVzvHoCYoxizr9X1/scene.splinecode"
-        />
-        </div>
-
-
+        /> */}
+        {/* </div> */}
       </div>
-
+      </section>
       <div className="h-[50px] w-[146px] bg-black translate-x-[1300px] mt-[30px] translate-y-10 relative"></div>
-
+     
+      <section id="features">
       <Cards
         tittle="Annotate your documents w. ease"
         description="Highlight text or areas, listen with text-to-speech, and stay focused while reading."
@@ -55,8 +57,13 @@ export default function Home() {
         description="Share updates instantly, comment on highlights, and work together seamlessly on documents."
         image="/gif/collab.gif"
       />
-      <div className="mb-[150px]"></div> 
-           
+      </section>
+      {/* <div className="mb-[50px]"></div> 
+
+       <CardDemo className="mt-[50px] z-50"/> */}
+       <div className="mb-[100px]"></div>
+
+       <AboutPage/>
     </>
   );
 }

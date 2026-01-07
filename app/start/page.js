@@ -169,15 +169,15 @@ const Start = () => {
         <div>
           <PdfDropzone />
         </div>
-        {/* <div className="flex gap-[100px]">
+        <div className="flex gap-[700px]">
           <div>
-            <Image src="/images/upload1.png" width={550} height={550} alt="Ayush Kumar" className="rounded-2xl " />
+            <Image src="/images/upload1.png" width={350} height={350} alt="Ayush Kumar" className="rounded-2xl translate-x-[-110px] translate-y-[-100px]" />
           </div>
           <div>
-            <Image src="/images/upload2.png" width={250} height={250} alt="Ayush Kumar" className="rounded-2xl object-cover" />
+            <Image src="/images/upload2.png" width={350} height={350} alt="Ayush Kumar" className="rounded-2xl object-cover translate-y-[-100px]" />
           </div>
 
-        </div> */}
+        </div>
       </div>
 
       {/* Search Chats Dialog */}
@@ -420,5 +420,4 @@ const Start = () => {
     </div>
   );
 };
-
 export default Start;

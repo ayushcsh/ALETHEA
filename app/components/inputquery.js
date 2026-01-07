@@ -11,6 +11,7 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { Streamdown } from "streamdown";
 import { FaTwitter, FaLinkedinIn, FaRedditAlien } from "react-icons/fa";
 import { FiLink } from "react-icons/fi";
+import ReactMarkdown from "react-markdown";
 import {
   Carousel,
   CarouselContent,
@@ -274,8 +275,8 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
                         height={200}
                         className="absolute translate-y-[-40px] ml-[-70px]"
                       />
-                      <p className="text-white relative text-[16px] bg-[#262626] rounded-[15px] p-2 font-[Arial]">
-                        <Streamdown>{item.answer}</Streamdown>
+                      <p className="text-white relative text-[16px] sm:w-[100vw] bg-[#262626] rounded-[15px] p-2 font-[Arial]">
+                        <ReactMarkdown>{item.answer}</ReactMarkdown>
                       </p>
 
                       {/* Copy / Share / Download Buttons */}

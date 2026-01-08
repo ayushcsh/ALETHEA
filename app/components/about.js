@@ -23,18 +23,47 @@ function useCounter(from, to, duration = 2000) {
     };
 
     requestAnimationFrame(step);
-  }, []);
+  }, [from, to, duration]);
 
   return value;
 }
 
+// ================================
+// STAT CARD COMPONENT
+// ================================
+function StatCard({ end, suffix, label }) {
+  const counter = useCounter(0, end, 2000);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="bg-[#12121280] backdrop-blur-md border border-[#2a2a2a] p-4 md:p-6 rounded-xl text-center"
+    >
+      <h2 className="text-2xl md:text-4xl font-bold bg-[#d03902] bg-clip-text text-transparent">
+        {counter}
+        {suffix}
+      </h2>
+      <p className="text-gray-400 mt-2 font-[Arial] text-sm md:text-base">
+        {label}
+      </p>
+    </motion.div>
+  );
+}
+
+// ================================
+// ABOUT PAGE
+// ================================
 export default function AboutPage() {
   return (
     <div className="w-full min-h-screen bg-black text-white">
 
       {/* HERO SECTION */}
-      <section id="about" className="w-full max-w-7xl mx-auto px-6 pt-10 flex flex-col md:flex-row items-center gap-10">
-
+      <section
+        id="about"
+        className="w-full max-w-7xl mx-auto px-6 pt-10 flex flex-col md:flex-row items-center gap-10"
+      >
         {/* Left Text */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
@@ -75,33 +104,11 @@ export default function AboutPage() {
       </section>
 
       {/* STATS SECTION */}
-      <section className="w-full max-w-6xl mx-auto px-6 mt-20 mb-20 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 text-center">
-        {[
-          [50000, "+", "Documents Processed"],
-          [90, "% Faster", "Content Understanding"],
-          [98, "% Accuracy", "AI Answers"],
-          [2, "×", "Study Productivity"],
-        ].map(([end, suffix, label], i) => {
-          const counter = useCounter(0, end, 2000);
-
-          return (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-[#12121280] backdrop-blur-md border border-[#2a2a2a] p-4 md:p-6 rounded-xl"
-            >
-              <h2 className="text-2xl md:text-4xl font-bold bg-[#d03902] bg-clip-text text-transparent">
-                {counter}
-                {suffix}
-              </h2>
-              <p className="text-gray-400 mt-2 font-[Arial] text-sm md:text-base">
-                {label}
-              </p>
-            </motion.div>
-          );
-        })}
+      <section className="w-full max-w-6xl mx-auto px-6 mt-20 mb-20 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+        <StatCard end={50000} suffix="+" label="Documents Processed" />
+        <StatCard end={90} suffix="% Faster" label="Content Understanding" />
+        <StatCard end={98} suffix="% Accuracy" label="AI Answers" />
+        <StatCard end={2} suffix="×" label="Study Productivity" />
       </section>
 
       {/* WHY CHOOSE US */}
@@ -149,7 +156,9 @@ export default function AboutPage() {
           />
 
           <div className="text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Meet the Founder</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Meet the Founder
+            </h2>
 
             <h3 className="text-xl md:text-2xl font-semibold mb-2 bg-gradient-to-t from-black via-[#d03902] to-[#d03902] bg-clip-text text-transparent">
               Ayush Kumar
@@ -158,7 +167,8 @@ export default function AboutPage() {
             <p className="text-gray-300 leading-relaxed text-base md:text-lg font-[Arial]">
               I’m Ayush, a computer science student passionate about building meaningful tech.
               Like many students, I struggled with long PDFs, heavy theory chapters,
-              and last-night exam stress. <br /><br />
+              and last-night exam stress.
+              <br /><br />
               So I created ALETHEA — a tool that helps students study smarter,
               remember better, and learn faster using AI.
             </p>
@@ -167,8 +177,13 @@ export default function AboutPage() {
       </section>
 
       {/* NEWSLETTER */}
-      <section id="contact" className="w-full max-w-4xl mx-auto px-6 mb-20 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">Stay Updated</h2>
+      <section
+        id="contact"
+        className="w-full max-w-4xl mx-auto px-6 mb-20 text-center"
+      >
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          Stay Updated
+        </h2>
 
         <p className="text-gray-400 mb-6 font-[Arial] text-sm md:text-base">
           Get updates, new features, and AI study tips directly in your inbox.

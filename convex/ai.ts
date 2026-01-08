@@ -2,7 +2,7 @@ import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI("AIzaSyDaH1S3zlD82taOoVmxs7GxydMbbeKW8Ms");
+const genAI = new GoogleGenerativeAI("AIzaSyB9a_JSdEZuiwLN9xkLQmV5v_HbQXb_jTY");
 
 export const aiMessage = action({
   args: {

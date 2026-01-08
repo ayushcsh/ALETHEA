@@ -1,7 +1,7 @@
 import {GoogleGenAI} from "@google/genai";
 
 const ai = new GoogleGenAI({
-    apiKey: "AIzaSyDhsIqtHikYrYq0zTgkxUFHYrpFC6jejlk" ,
+    apiKey: "AIzaSyDjCwDyvChggyUvZuc1KNCb8eZqHT_x9W4",
 });
 
 export async function getEmbedding(text: string): Promise<number[]> {

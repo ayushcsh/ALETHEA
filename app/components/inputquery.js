@@ -275,7 +275,7 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
                         height={200}
                         className="absolute translate-y-[-40px] ml-[-70px]"
                       />
-                      <p className="text-white relative text-[16px] sm:w-[100vw] bg-[#262626] rounded-[15px] p-2 font-[Arial]">
+                      <p className="text-white relative text-[16px] md:max-w-[65vw] sm:w-[100vw] bg-[#262626] rounded-[15px] p-2 font-[Arial]">
                         <ReactMarkdown>{item.answer}</ReactMarkdown>
                       </p>
 

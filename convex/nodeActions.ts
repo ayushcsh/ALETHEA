@@ -10,7 +10,7 @@ export const extractText = action({
     console.log("Inside extractText action");
     const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-    const res = await fetch(`https://stanniferous-unsnagged-lanette.ngrok-free.dev/api/extract`, {
+    const res = await fetch(`https://alethea-app4u.vercel.app/api/extract`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url, fileName }),

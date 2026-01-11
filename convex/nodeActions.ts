@@ -8,20 +8,32 @@ export const extractText = action({
 
   handler: async (_, { url, fileName }) => {
     console.log("Inside extractText action");
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    const apiBase = process.env.NEXT_PUBLIC_API_URL;
 
-    const res = await fetch(`https://alethea-app4u.vercel.app/api/extract`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url, fileName }),
-    });
-
-    if (!res.ok) {
-      const error = await res.text();
-      throw new Error(`Text extraction failed: ${error}`);
+    if (!apiBase) {
+      throw new Error("NEXT_PUBLIC_API_URL is not defined in environment variables");
     }
 
-    const data = await res.json();
-    return data.text;
+    const targetUrl = `${apiBase}/api/extract`;
+    console.log(`Sending extraction request to: ${targetUrl}`);
+
+    try {
+      const res = await fetch(targetUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, fileName }),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Text extraction failed (${res.status} from ${targetUrl}): ${errorText.substring(0, 200)}`);
+      }
+
+      const data = await res.json();
+      return data.text;
+    } catch (err: any) {
+      throw new Error(`Fetch error: ${err.message}`);
+    }
+
   },
 });

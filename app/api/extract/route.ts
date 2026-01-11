@@ -4,18 +4,17 @@
 // } catch (err) {
 //   console.warn("pdf-parse/worker not found — continuing without it");
 // }
-
+export const runtime = "nodejs";
 import { PDFParse } from "pdf-parse";
 import mammoth from "mammoth";
 import { NextResponse } from "next/server";
 import axios from "axios";
-
 // Fetch file buffer
 async function fetchFileBuffer(url: string): Promise<Buffer> {
-  try {
+  try{
     const response = await axios.get<ArrayBuffer>(url, { responseType: "arraybuffer" });
     return Buffer.from(response.data);
-  } catch (err: any) {
+  }catch (err: any) {
     throw new Error(`Failed to fetch file from URL ${url}: ${err.message}`);
   }
 }
@@ -24,12 +23,12 @@ async function fetchFileBuffer(url: string): Promise<Buffer> {
 async function extractPDFText(url: string): Promise<string> {
   const buffer = await fetchFileBuffer(url);
   const parser = new PDFParse({ data: buffer });
-  try {
+  try{
     const result = await parser.getText();
     return result.text;
-  } catch (err: any) {
+  }catch (err: any) {
     throw new Error(`PDF parsing error for ${url}: ${err.message}`);
-  } finally {
+  }finally {
     await parser.destroy();
   }
 }
@@ -58,15 +57,12 @@ export async function POST(req: Request) {
   try {
     const { url, fileName } = await req.json();
     if (!url || !fileName) throw new Error("Missing 'url' or 'fileName' in request body");
-
     const text = await extractTextFromUrl(url, fileName);
     const response = NextResponse.json({ text });
-
     // Add CORS headers
     response.headers.set("Access-Control-Allow-Origin", "*");
     response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
     response.headers.set("Access-Control-Allow-Headers", "Content-Type");
-
     return response;
   } catch (err: any) {
     console.error("Error in /extract route:", err);

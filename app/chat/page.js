@@ -325,7 +325,7 @@ function ChatContent() {
 
       {/* Chat Section */}
       <div
-        className={`h-[95vh] ${
+        className={`h-[99vh] ${
           showPDF ? "w-[70%]" : "w-[70%] mx-auto"
         } shadow-md rounded-[10px] flex justify-center items-center transition-all duration-500 md:translate-x-0 translate-x-[-10px]`}
       >

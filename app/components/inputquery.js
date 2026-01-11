@@ -96,6 +96,8 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
     };
   }, [shareOpen]);
 
+  const [isGenerating, setIsGenerating] = useState(false);
+
   // Format previous messages
   useEffect(() => {
     if (!prevmessage) return;
@@ -133,8 +135,18 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
         type: "text",
       };
     });
+
+    // If we are generating a response and the last message is from the user (or list is empty), append a loader
+    if (isGenerating) {
+        const lastMsg = formatted[formatted.length - 1];
+        // Only append if the last message doesn't already have an answer (to avoid duplicates if DB updates fast)
+        if (!lastMsg || !lastMsg.answer) {
+             formatted.push({ query: "", answer: "loading", isLoading: true });
+        }
+    }
+
     setChat(formatted);
-  }, [prevmessage]);
+  }, [prevmessage, isGenerating]);
 
   // Auto scroll to bottom
   useEffect(() => {
@@ -147,6 +159,9 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
     if (!input) return;
     const userquery = input;
     setInput("");
+    setIsGenerating(true);
+    
+    // Optimistic update
     const newMessage = { query: userquery, answer: "loading", isLoading: true };
     setChat((prev) => [...prev, newMessage]);
 
@@ -157,13 +172,11 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
         message: userquery,
         pdfId,
       });
-      setChat((prev) =>
-        prev.map((msg, idx) =>
-          idx === prev.length - 1
-            ? { ...msg, answer: response, isLoading: false }
-            : msg
-        )
-      );
+      // We don't strictly need to update chat here because prevmessage will update, 
+      // but we do it to ensure immediate feedback if prevmessage is slow.
+      // However, to avoid conflicts, we can rely on setIsGenerating(false) to trigger the useEffect 
+      // which will remove the loader if the DB has the answer.
+      
     } catch {
       setChat((prev) => [
         ...prev,
@@ -173,6 +186,8 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
           isLoading: false,
         },
       ]);
+    } finally {
+        setIsGenerating(false);
     }
   };
 
@@ -194,7 +209,7 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-between h-[95.5vh] w-[99%]">
+    <div className="flex flex-col items-center justify-between h-[97.5vh] w-[99%]">
       {/* Messages */}
       <div
         ref={scrollRef}
@@ -217,9 +232,9 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
                 </div>
               )}
               {(item.answer || item.isLoading) && (
-                <div className="relative max-w-[98%] w-fit rounded-[15px] p-2 font-[Arial]">
+                <div className="relative max-w-[98%] w-fit rounded-[15px] p-2 font-[Arial] mb-6">
                   {item.isLoading ? (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mb-2">
                       <Loader2 className="h-6 w-6 animate-spin text-white bg-[#262626] rounded-2xl" />
                       <span className="text-gray-400">Thinking...</span>
                     </div>
@@ -268,19 +283,24 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
                     </div>
                   ) : (
                     <div className="relative">
-                      <Image
-                        src="/images/cat.png"
-                        alt="cat"
-                        width={200}
-                        height={200}
-                        className="absolute translate-y-[-40px] ml-[-70px]"
-                      />
-                      <p className="text-white relative text-[16px] md:max-w-[65vw] sm:w-[100vw] bg-[#262626] rounded-[15px] p-2 font-[Arial]">
-                        <ReactMarkdown>{item.answer}</ReactMarkdown>
-                      </p>
+                      <div className="relative inline-block">
+  <Image
+    src="/images/cat.png"
+    alt="cat"
+    width={200}
+    height={200}
+    className="absolute left-[-70px] top-[-40px] z-0 opacity-80"
+  />
+
+  <p className="relative z-10 inline-block w-fit max-w-[65vw] bg-[#262626] text-white text-[16px] rounded-[15px] p-2 pr-2 font-[Arial] break-words">
+    <ReactMarkdown>{item.answer}</ReactMarkdown>
+  </p>
+</div>
+
+
 
                       {/* Copy / Share / Download Buttons */}
-                      <div className="flex mb-2 mt-1 ml-2 relative">
+                      <div className="flex mb-3 mt-1 ml-2 relative">
                         {/* Copy */}
                         <button
                           onClick={() => handleCopy(item.answer, index)}

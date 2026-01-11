@@ -166,18 +166,16 @@ const Start = () => {
           <div className="bg-white h-[0.1px] w-[20vw] mt-[23px]"></div>
         </div>
 
-        <div>
+        <div className="flex justify-center items-center mr-8">
+          <div>
+            <Image src="/images/upload1.png" width={350} height={350} alt="Ayush Kumar" className="rounded-2xl translate-y-28" />
+          </div>
           <PdfDropzone />
-        </div>
-        <div className="flex gap-[700px]">
           <div>
-            <Image src="/images/upload1.png" width={350} height={350} alt="Ayush Kumar" className="rounded-2xl translate-x-[-110px] translate-y-[-100px]" />
+            <Image src="/images/upload2.png" width={300} height={300} alt="Ayush Kumar" className="rounded-2xl translate-y-25 object-cover" />
           </div>
-          <div>
-            <Image src="/images/upload2.png" width={350} height={350} alt="Ayush Kumar" className="rounded-2xl object-cover translate-y-[-100px]" />
-          </div>
-
         </div>
+        
       </div>
 
       {/* Search Chats Dialog */}

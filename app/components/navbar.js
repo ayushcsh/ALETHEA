@@ -57,7 +57,7 @@ function MyNavbar() {
               {/* Button that adapts to screen width */}
               <NavbarButton
                 variant="gradient"
-                className="bg-orange-600 font-bold shadow-[0_0_20px_#ff6600] transition-all duration-300
+                className="bg-orange-600 font-bold transition-all duration-300
                            h-[40px] flex items-center justify-center text-white
                            px-4 rounded-3xl w-auto sm:w-auto truncate
                            sm:min-w-[120px] sm:max-w-[180px]"

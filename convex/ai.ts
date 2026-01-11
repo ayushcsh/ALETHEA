@@ -2,7 +2,7 @@ import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI("AIzaSyB9a_JSdEZuiwLN9xkLQmV5v_HbQXb_jTY");
+const genAI = new GoogleGenerativeAI(`${process.env.GOOGLE_API_KEY}`);
 
 export const aiMessage = action({
   args: {
@@ -42,7 +42,7 @@ export const aiMessage = action({
     
 
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const messages = buildMessages(prevMessages, relevantChunks, userMessage);
 
       const result = await model.generateContent({ contents: messages });

@@ -126,7 +126,7 @@ export default function PdfDropzone({}) {
         <Dropzone
           accept={{ "application/pdf": [] }}
           maxFiles={1}
-          maxSize={10 * 1024 * 1024}
+          maxSize={20 * 1024 * 1024}
           onDrop={handleDrop}
           onError={console.error}
           className="border-[#ff6600] hover:bg-black shadow-[0_0_20px_#ff6600] transition-all duration-300 mt-[30px] cursor-pointer"

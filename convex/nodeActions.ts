@@ -15,7 +15,8 @@ export const extractText = action({
     }
 
     const targetUrl = `${apiBase}/api/extract`;
-    console.log(`Sending extraction request to: ${targetUrl}`);
+    console.log(`Sending extraction request to: ${targetUrl}`); // Debug Log
+    console.log("Using API Base:", apiBase);
 
     try {
       const res = await fetch(targetUrl, {

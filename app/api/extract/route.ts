@@ -5,7 +5,7 @@
 //   console.warn("pdf-parse/worker not found — continuing without it");
 // }
 export const runtime = "nodejs";
-import { PDFParse } from "pdf-parse";
+import pdf from "pdf-parse";
 import mammoth from "mammoth";
 import { NextResponse } from "next/server";
 import axios from "axios";
@@ -22,14 +22,11 @@ async function fetchFileBuffer(url: string): Promise<Buffer> {
 // PDF extraction
 async function extractPDFText(url: string): Promise<string> {
   const buffer = await fetchFileBuffer(url);
-  const parser = new PDFParse({ data: buffer });
   try{
-    const result = await parser.getText();
-    return result.text;
+    const data = await pdf(buffer);
+    return data.text;
   }catch (err: any) {
     throw new Error(`PDF parsing error for ${url}: ${err.message}`);
-  }finally {
-    await parser.destroy();
   }
 }
 

@@ -1,9 +1,12 @@
-export function chunktext (text: string, chunkSize: number): string[] {
-    const words = text.split(/\s+/);
-    const chunks: string[] = [];
-    for(let i = 0; i < words.length; i+= chunkSize){
-        const chunk = words.slice(i, i + chunkSize).join(' ');
-        chunks.push(chunk);
-    }
-    return chunks;
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+
+export async function chunkText(text: string): Promise<string[]> {
+  const splitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 1000,
+    chunkOverlap: 150,
+  });
+
+  const chunks = await splitter.splitText(text);
+
+  return chunks;
 }

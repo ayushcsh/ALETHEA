@@ -6,7 +6,7 @@ import {
 } from "../convex/_generated/server";
 import { Id } from "../convex/_generated/dataModel";
 import { v } from "convex/values";
-import { chunktext } from "../utils/chunktext";
+import { chunkText } from "../utils/chunktext";
 import { getEmbedding } from "../utils/getEmbedding";
 import { api, internal } from "../convex/_generated/api";
 import { internalQuery } from "../convex/_generated/server";
@@ -20,8 +20,9 @@ export const getRelevantContext = query({
   handler: async (ctx, { embeddingIds }) => {
     const results = await Promise.all(embeddingIds.map((id) => ctx.db.get(id)));
 
-    // Filter out nulls and return just the text fields
-    return results.filter((res) => res !== null).map((res) => res!.chunk);
+    return results
+      .filter((res) => res !== null)
+      .map((res) => ({ chunk: res!.chunk, fileName: res!.fileName ?? null }));
   },
 });
 export const getid = internalQuery({
@@ -43,6 +44,7 @@ export const insert = internalMutation({
     chunk: v.string(),
     embedding: v.array(v.number()),
     createdAt: v.number(),
+    fileName: v.optional(v.string()),
   },
   handler: async (
     ctx,
@@ -51,11 +53,13 @@ export const insert = internalMutation({
       chunk,
       embedding,
       createdAt,
+      fileName,
     }: {
       pdfId: Id<"pdfs">;
       chunk: string;
       embedding: number[];
       createdAt: number;
+      fileName?: string;
     }
   ) => {
     await ctx.db.insert("pdfembeddings", {
@@ -63,6 +67,7 @@ export const insert = internalMutation({
       chunk,
       embedding,
       createdAt,
+      fileName,
     });
   },
 });
@@ -89,27 +94,23 @@ export const embedings = action({
       throw new Error("Failed to get PDF URL from storage");
     }
 
-    // 3Extract text from PDF (you can use a server utility or library)
     const text = await ctx.runAction(api.nodeActions.extractText, {
       url,
       fileName: pdf.fileName,
     });
 
-    // chunk text into smaller pieces
-    const chunks = chunktext(text, 200); // adjust chunk size as needed
-
-    // process each chunk and store into convex
+    const chunks = await chunkText(text);
 
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i];
       const embedding = await getEmbedding(chunk);
-      // store this embedding
 
       await ctx.runMutation(internal.embedings.insert, {
         pdfId,
         chunk,
         embedding,
         createdAt: Date.now(),
+        fileName: pdf.fileName,
       });
     }
 
@@ -150,15 +151,29 @@ export const getvectorembeddings = internalAction({
     
 
     // fetch the full records from Convex using the IDs
-    const chunkTexts: string[] = await ctx.runQuery(
-      api.embedings.getRelevantContext,
-      {
+    const records: { chunk: string; fileName: string | null }[] =
+      await ctx.runQuery(api.embedings.getRelevantContext, {
         embeddingIds: ids,
+      });
+    console.log("📚 Retrieved chunk records:", records.length);
+
+    const uniqueTexts = [...new Set(records.map((r) => r.chunk.trim()))];
+    let sources = [
+      ...new Set(
+        records.map((r) => r.fileName).filter((f): f is string => Boolean(f))
+      ),
+    ];
+
+    // Older embeddings predate storing fileName per chunk — fall back to the
+    // parent PDF's fileName so sources still show up for those documents.
+    if (!sources.length && uniqueTexts.length) {
+      const pdf = await ctx.runQuery(internal.embedings.getid, { pdfId });
+      if (pdf?.fileName) {
+        sources = [pdf.fileName];
       }
-    );
-    console.log("📚 Retrieved chunk texts:", chunkTexts.length);
-    const uniqueTexts = [...new Set(chunkTexts.map((t) => t.trim()))];
-    console.log("✅ Unique relevant chunks:", uniqueTexts.length);
-    return uniqueTexts;
+    }
+
+    console.log("✅ Unique relevant chunks:", uniqueTexts.length, "Sources:", sources);
+    return { chunks: uniqueTexts, sources };
   },
 });

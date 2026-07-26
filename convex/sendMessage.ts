@@ -14,16 +14,16 @@ export const saveMessage = mutation({
     userId: v.optional(v.id("users")),
     content: v.string(),
     role: v.union(v.literal("user"), v.literal("AI")),
+    sources: v.optional(v.array(v.string())),
   },
 
-  handler: async (ctx, { chatId, userId,content, role }) => {
-   
-
+  handler: async (ctx, { chatId, userId, content, role, sources }) => {
     const message = await ctx.db.insert("messages", {
       chatId,
       userId,
       content,
       role,
+      sources,
       createdAt: Date.now(),
     });
 
@@ -52,13 +52,15 @@ export const insert = mutation({
     userId: v.optional(v.id("users")),
     content: v.string(),
     role: v.union(v.literal("user"), v.literal("AI")),
+    sources: v.optional(v.array(v.string())),
   },
-  handler: async (ctx, { chatId, userId, content, role }) => {
+  handler: async (ctx, { chatId, userId, content, role, sources }) => {
     const message = await ctx.db.insert("messages", {
       chatId,
       userId,
       content,
       role,
+      sources,
       createdAt: Date.now(),
     });
 
@@ -114,20 +116,34 @@ export const sendMessageToAi = action({
       content: m.content,
     })) as { role: "user" | "AI"; content: string }[];
 
-    // fetch embeddings from the pdf
+    // fetch embeddings from the pdf. The chat's own pdfId is authoritative —
+    // the client-supplied pdfId comes from localStorage and can drift when
+    // the user has multiple chats/PDFs, so fall back to it only if the chat
+    // itself has none recorded.
+    const chat = await ctx.runQuery(api.chatid.getChatById, { chatId });
+    const effectivePdfId = chat?.pdfId ?? pdfId;
 
     let relevantChunks: string[] = [];
-    console.log("PDF ID:", pdfId);
-    if (pdfId) {
-      relevantChunks = await ctx.runAction(internal.embedings.getvectorembeddings, {
-        pdfId,
+    let sources: string[] = [];
+    console.log("PDF ID:", effectivePdfId);
+    if (effectivePdfId) {
+      const result = await ctx.runAction(internal.embedings.getvectorembeddings, {
+        pdfId: effectivePdfId,
         queryText: message,
         topK: 3,
       });
+      relevantChunks = result.chunks;
+
+      // The chat's PDF is always the source being discussed, regardless of
+      // whether a specific chunk carried its fileName — show it every time.
+      const pdf = await ctx.runQuery(internal.embedings.getid, {
+        pdfId: effectivePdfId,
+      });
+      sources = pdf?.fileName ? [pdf.fileName] : result.sources;
     }
-    
+
     console.log("Relevant Chunks:", relevantChunks);
-    
+
     //  call the ai and send all the context and recieve the message
     let aiResponse = "";
     aiResponse = await ctx.runAction(api.ai.aiMessage, {
@@ -141,8 +157,9 @@ export const sendMessageToAi = action({
       userId: userId,
       content: aiResponse,
       role: "AI",
+      sources,
     });
 
-    return aiResponse;
+    return { answer: aiResponse, sources };
   },
 });

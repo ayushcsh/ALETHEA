@@ -45,6 +45,13 @@ export const getChatsByUser = query({
   },
 });
 
+export const getChatById = query({
+  args: { chatId: v.id("chats") },
+  handler: async (ctx, { chatId }) => {
+    return await ctx.db.get(chatId);
+  },
+});
+
 // 🟦 Get all messages by chatId
 export const getMessagesByChatId = query({
   args: { chatId: v.string() },

@@ -24,6 +24,12 @@
         chunk : v.string(),
         embedding : v.array(v.float64()),
         createdAt: v.number(),
+        fileName: v.optional(v.string()),
+        // Legacy fields written by an earlier ingestion pipeline; kept optional
+        // so old rows still pass schema validation.
+        chunkIndex: v.optional(v.number()),
+        documentId: v.optional(v.string()),
+        page: v.optional(v.number()),
     }).index("by_pdf", ["pdfId"])
      .vectorIndex("by_embedding", {
       vectorField: "embedding",
@@ -47,6 +53,7 @@
         userId : v.optional(v.id("users")),
         content: v.string(),
         role: v.string(),
+        sources: v.optional(v.array(v.string())),
         createdAt: v.number(),
-    }).index("by_chat", ["chatId"]),    
+    }).index("by_chat", ["chatId"]),
     });

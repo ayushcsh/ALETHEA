@@ -16,20 +16,19 @@ export default function LoginPage() {
     return (
         <>
             <Navbar />
-            <div className='flex'>
-                <div className='h-[70vh] w-[80vh] pl-[90px] '>
+            <div className='flex flex-col md:flex-row items-center md:items-start px-4 md:px-0'>
+                <div className='h-[40vh] w-full max-w-[360px] sm:max-w-[420px] md:h-[70vh] md:w-[80vh] md:pl-[90px] mx-auto md:mx-0'>
                     <Loginrobot/>
-                    <div className='bg-black h-[60px] w-[200px] ml-[60%] translate-y-[-70px]'></div>
+                    <div className='hidden md:block bg-black h-[60px] w-[200px] ml-[60%] translate-y-[-70px]'></div>
                 </div >
-                <div className='flex flex-col mt-[5.5%] '>
-                    <div className=' justify-center text-[45px] mt-[3%] ml-[40px] '>
+                <div className='flex flex-col items-center md:items-start w-full md:w-auto mt-2 md:mt-[5.5%] '>
+                    <div className=' justify-center text-[32px] md:text-[45px] mt-[3%] ml-0 md:ml-[40px] text-center md:text-left'>
                         Welcome back
                     </div>
-                    <div>
-                        <div className="flex flex-col gap-9 bg-black p-6 ml-[40px] justify-center items-center">
-                            <button
-
-                                className=" w-[260px] disabled:opacity-50 cursor-pointer flex items-center  max-w-xs px-6 py-2 text-sm   hover:bg-zinc-950   bg-black text-white border-2 border-[#ff6600] shadow-glow-orange h-[60px]  font-bold rounded-3xl shadow-[0_0_20px_#ff6600] transition-all duration-300 ">
+                    <div className='w-full'>
+                        <div className="flex flex-col gap-9 bg-black p-6 ml-0 md:ml-[40px] justify-center items-center">
+                            <button onClick={() => { signIn("google") }}
+                                className=" w-full max-w-[260px] disabled:opacity-50 cursor-pointer flex items-center px-6 py-2 text-sm   hover:bg-zinc-950   bg-black text-white border-2 border-[#ff6600] shadow-glow-orange h-[60px]  font-bold rounded-3xl shadow-[0_0_20px_#ff6600] transition-all duration-300 ">
                                 <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                                     viewBox="-0.5 0 48 48" version="1.1">
 
@@ -54,8 +53,8 @@ export default function LoginPage() {
                                 </svg>
                                 <span>Continue with Google</span>
                             </button>
-                            <button onClick={() => { signIn("github ") }}
-                                className="w-[260px] disabled:opacity-50 cursor-pointer flex items-center  max-w-xs px-6 py-2 text-sm   hover:bg-zinc-950   bg-black text-white border-2 border-[#ff6600] shadow-glow-orange h-[60px]  font-bold rounded-3xl shadow-[0_0_20px_#ff6600] transition-all duration-300 ">
+                            <button onClick={() => { signIn("github") }}
+                                className="w-full max-w-[260px] disabled:opacity-50 cursor-pointer flex items-center px-6 py-2 text-sm   hover:bg-zinc-950   bg-black text-white border-2 border-[#ff6600] shadow-glow-orange h-[60px]  font-bold rounded-3xl shadow-[0_0_20px_#ff6600] transition-all duration-300 ">
                                 <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                                     viewBox="0 0 73 73" version="1.1">
                                     <g id="team-collaboration/version-control/github" stroke="none" strokeWidth="1" fill="none"

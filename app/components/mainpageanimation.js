@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import CursorGrid from '../../components/ui/CursorGrid'
 
 const mainpageanimation = () => {
   return (
@@ -21,8 +22,27 @@ const mainpageanimation = () => {
       {/* OPTIONAL DARK OVERLAY (makes text more readable) */}
       <div className="absolute inset-0 bg-black/40 -z-10"></div>
 
+      {/* INTERACTIVE CURSOR GRID */}
+      <div className="absolute inset-0 z-0">
+        <CursorGrid
+          cellSize={56}
+          color="#ff6600"
+          radius={160}
+          falloff="smooth"
+          holdTime={400}
+          fadeDuration={800}
+          lineWidth={1}
+          maxOpacity={0.5}
+          fillOpacity={0.05}
+          gridOpacity={0.08}
+          cellRadius={6}
+          clickPulse
+          pulseSpeed={600}
+        />
+      </div>
+
       {/* MAIN CONTENT */}
-      <div className="md:w-[100%] w-[80%] p-2 flex flex-col justify-center items-center mt-[30px] md:mt-[0px] text-white">
+      <div className="relative z-10 md:w-[100%] w-[80%] p-2 flex flex-col justify-center items-center mt-[30px] md:mt-[0px] text-white">
         
         <h1 className="text-[30px] md:text-[55px] font-bebas font-bold text-center">
           Chat,{" "}

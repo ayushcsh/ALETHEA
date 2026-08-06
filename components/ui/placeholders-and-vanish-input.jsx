@@ -11,14 +11,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
-import Link from "next/link";
+import PdfDropzone from "../../app/components/dropzone";
 
 export function PlaceholdersAndVanishInput({
   placeholders,
   onChange,
   onSubmit,
   className,
-  chatlength
+  chatlength,
+  chatId
 }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
 
@@ -227,11 +228,9 @@ export function PlaceholdersAndVanishInput({
                 Actions
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-[#121212]" />
-              <Link href="/start" passHref>
-                <DropdownMenuItem className="cursor-pointer font-[Arial] hover:bg-[#2a2a2a]">
-                  Upload New PDF
-                </DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem asChild className="p-0 focus:bg-transparent">
+                <PdfDropzone chatId={chatId} menuitem />
+              </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer font-[Arial] hover:bg-[#2a2a2a]">
                 <button>Summarize PDF</button>
               </DropdownMenuItem>

@@ -41,6 +41,7 @@ export const getid = internalQuery({
 export const insert = internalMutation({
   args: {
     pdfId: v.id("pdfs"),
+    chatId : v.optional(v.id("chats")),
     chunk: v.string(),
     embedding: v.array(v.number()),
     createdAt: v.number(),
@@ -50,12 +51,14 @@ export const insert = internalMutation({
     ctx,
     {
       pdfId,
+      chatId,
       chunk,
       embedding,
       createdAt,
       fileName,
     }: {
       pdfId: Id<"pdfs">;
+      chatId?: Id<"chats">
       chunk: string;
       embedding: number[];
       createdAt: number;
@@ -64,6 +67,7 @@ export const insert = internalMutation({
   ) => {
     await ctx.db.insert("pdfembeddings", {
       pdfId,
+      chatId,
       chunk,
       embedding,
       createdAt,
@@ -75,11 +79,12 @@ export const insert = internalMutation({
 export const embedings = action({
   args: {
     pdfId: v.id("pdfs"),
+    chatId : v.optional(v.id("chats")),
   },
 
   handler: async (
     ctx,
-    { pdfId }: { pdfId: Id<"pdfs"> }
+    { pdfId, chatId }: { pdfId: Id<"pdfs">; chatId?: Id<"chats">}
   ): Promise<{ url: string }> => {
     // get the pdf record
     // const pdf = await ctx.db.get(pdfId);
@@ -107,6 +112,7 @@ export const embedings = action({
 
       await ctx.runMutation(internal.embedings.insert, {
         pdfId,
+        chatId,
         chunk,
         embedding,
         createdAt: Date.now(),
@@ -120,20 +126,20 @@ export const embedings = action({
 
 export const getvectorembeddings = internalAction({
   args: {
-    pdfId: v.id("pdfs"),
+    chatId: v.id("chats"),
     queryText: v.string(),
     topK: v.optional(v.number()),
   },
   handler: async (
     ctx,
     {
-      pdfId,
+      chatId,
       queryText,
       topK,
-    }: { pdfId: Id<"pdfs">; queryText: string; topK?: number }
-  ) => {
+    }: { chatId: Id<"chats">; queryText: string; topK?: number }
+  ): Promise<{ chunks: string[]; sources: string[] }> => {
     // get embedding for query text
-    console.log("🔎 getvectorembeddings called with:", { pdfId, queryText, topK });
+    console.log("🔎 getvectorembeddings called with:", { chatId, queryText, topK });
     const queryEmbedding = await getEmbedding(queryText);
     console.log("📊 Generated query embedding, length:", queryEmbedding.length);
 
@@ -141,7 +147,7 @@ export const getvectorembeddings = internalAction({
     // Perform vector similarity search in Convex
     const searchResults = await ctx.vectorSearch("pdfembeddings", "by_embedding",  {
       vector: queryEmbedding,
-      filter: (q) => q.eq("pdfId", pdfId),
+      filter: (q) => q.eq("chatId", chatId),
       limit: topK,
     });
     console.log("🧠 Vector search results:", searchResults);
@@ -158,20 +164,11 @@ export const getvectorembeddings = internalAction({
     console.log("📚 Retrieved chunk records:", records.length);
 
     const uniqueTexts = [...new Set(records.map((r) => r.chunk.trim()))];
-    let sources = [
+    const sources = [
       ...new Set(
         records.map((r) => r.fileName).filter((f): f is string => Boolean(f))
       ),
     ];
-
-    // Older embeddings predate storing fileName per chunk — fall back to the
-    // parent PDF's fileName so sources still show up for those documents.
-    if (!sources.length && uniqueTexts.length) {
-      const pdf = await ctx.runQuery(internal.embedings.getid, { pdfId });
-      if (pdf?.fileName) {
-        sources = [pdf.fileName];
-      }
-    }
 
     console.log("✅ Unique relevant chunks:", uniqueTexts.length, "Sources:", sources);
     return { chunks: uniqueTexts, sources };

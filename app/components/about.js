@@ -57,7 +57,7 @@ function StatCard({ end, suffix, label }) {
 // ================================
 export default function AboutPage() {
   return (
-    <div className="w-full min-h-screen bg-black text-white">
+    <div className="w-full min-h-screen text-white">
 
       {/* HERO SECTION */}
       <section

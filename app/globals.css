@@ -52,10 +52,15 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Poppins','Bebas Neue', Arial, Helvetica, sans-serif;
-  background-image: url('/images/noisy-texture-100x100.png');
   background-color: black;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 @font-face {
@@ -153,32 +158,67 @@ body {
 /* Custom scrollbar for dark themed scroll area */
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 2px; /* width of the vertical scrollbar */
+  width: 3px; /* width of the vertical scrollbar, matches .pdf-scrollbar */
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: black; /* scrollbar track color (changed from white to black) */
+  background: transparent; /* blends with whatever the container's own bg is */
   border-radius: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: white; /* scrollbar thumb color (orange) */
+  background: white;
   border-radius: 8px;
-  border: 2px solid black; /* space around thumb, matches track */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: white; /* darker orange on hover */
+  background: white;
 }
 
 /* Firefox */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: white black; /* thumb white, track black */
+  scrollbar-color: white transparent; /* thumb white, track transparent */
+}
+
+/* Thin scrollbar for the PDF viewer */
+.pdf-scrollbar::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+.pdf-scrollbar::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 8px;
+}
+
+.pdf-scrollbar::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 8px;
+}
+
+.pdf-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: white;
+}
+
+.pdf-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: white #1a1a1a;
+}
+
+/* Scrollable but no visible scrollbar track, e.g. the PDF tab strip */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* old Edge/IE */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 /* GLOBAL SCROLLBAR */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 3px;
+  height: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -189,7 +229,6 @@ body {
 ::-webkit-scrollbar-thumb {
   background: white;
   border-radius: 8px;
-  border: 2px solid black;
 }
 
 ::-webkit-scrollbar-thumb:hover {

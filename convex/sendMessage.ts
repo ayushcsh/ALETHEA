@@ -86,7 +86,10 @@ export const sendMessageToAi = action({
     message: v.string(),
     pdfId: v.optional(v.id("pdfs")),
   },
-  handler: async (ctx, { chatId, userId, message, pdfId }) => {
+  handler: async (
+    ctx,
+    { chatId, userId, message, pdfId }
+  ): Promise<{ answer: string; sources: string[] }> => {
     // store the user message
     if (!userId) throw new Error("User ID is required");
     await ctx.runMutation(api.sendMessage.insert, {
@@ -116,31 +119,14 @@ export const sendMessageToAi = action({
       content: m.content,
     })) as { role: "user" | "AI"; content: string }[];
 
-    // fetch embeddings from the pdf. The chat's own pdfId is authoritative —
-    // the client-supplied pdfId comes from localStorage and can drift when
-    // the user has multiple chats/PDFs, so fall back to it only if the chat
-    // itself has none recorded.
-    const chat = await ctx.runQuery(api.chatid.getChatById, { chatId });
-    const effectivePdfId = chat?.pdfId ?? pdfId;
-
-    let relevantChunks: string[] = [];
-    let sources: string[] = [];
-    console.log("PDF ID:", effectivePdfId);
-    if (effectivePdfId) {
-      const result = await ctx.runAction(internal.embedings.getvectorembeddings, {
-        pdfId: effectivePdfId,
-        queryText: message,
-        topK: 3,
-      });
-      relevantChunks = result.chunks;
-
-      // The chat's PDF is always the source being discussed, regardless of
-      // whether a specific chunk carried its fileName — show it every time.
-      const pdf = await ctx.runQuery(internal.embedings.getid, {
-        pdfId: effectivePdfId,
-      });
-      sources = pdf?.fileName ? [pdf.fileName] : result.sources;
-    }
+    // fetch embeddings across every PDF attached to this chat
+    const result = await ctx.runAction(internal.embedings.getvectorembeddings, {
+      chatId,
+      queryText: message,
+      topK: 5,
+    });
+    const relevantChunks = result.chunks;
+    const sources = result.sources;
 
     console.log("Relevant Chunks:", relevantChunks);
 

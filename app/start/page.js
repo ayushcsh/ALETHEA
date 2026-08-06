@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import Navbar from "../components/navbar";
+import Link from "next/link";
 import PdfDropzone from "../components/dropzone";
 import { FloatingDock } from "../../components/ui/floating-dock";
 import {
@@ -38,6 +37,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { BackgroundGradient } from "../../components/ui/background-gradient";
+import FoldText from "../../components/ui/FoldText";
 
 const Start = () => {
   const [searchpdf, setSearchpdf] = useState(false);
@@ -128,54 +128,103 @@ const Start = () => {
 );
 
   return (
-    <div>
-      <Navbar />
-      <div className="flex flex-col justify-center items-center gap-2 md:mt-[100px] mt-[200px]">
-        <div>
-          <FloatingDock
-            items={items}
-            desktopClassName="mb-10 fixed -translate-y-1/2"
-            mobileClassName="fixed bottom-6 left-1/2 right-0 translate-x-[150px]  "
-          />
-        </div>
+    <div className="h-screen overflow-hidden flex flex-col relative bg-black">
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#ff6600]/[0.06] rounded-full blur-[160px]" />
+      </div>
 
-        <div className=" h-[35px] md:h-[40px] ml-[15px] md:ml-[0px] text-[10px] md:text-[14px] w-[40%] md:w-[15%] font-[Arial] bg-black border border-[#ff6600] flex justify-center items-center rounded-3xl shadow-[0_0_20px_#ff6600] transition-all duration-300">
-          ✨ AI powered content creation
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5 }}
-        >
-          <h1
-  className="md:text-[48px] text-[25px] w-[80vw] mt-[20px] ml-[10px] md:ml-[0px] font-bebas font-bold text-center 
-  text-transparent bg-clip-text bg-[#d03902] md:bg-gradient-to-t from-black via-[#d03902] to-[#d03902]"
->
- Why read when you can talk to me instead?
-</h1>
-
-          <p className="text-center text-[12px] md:text-[18px] mt-[10px] font-[Arial]">
-            Flashcards, summaries, and smart chat at your fingertips.
-          </p>
-        </motion.div>
-
-        <div className="flex mt-[10px]">
-          <div className="bg-white h-[0.1px] w-[20vw] mt-[23px]"></div>
-          <div className="md:mt-[13px] mt-[15px] ml-[8px] text-[10px] md:text-[14px] mr-[8px]">Upload PDF</div>
-          <div className="bg-white h-[0.1px] w-[20vw] mt-[23px]"></div>
-        </div>
-
-        <div className="flex justify-center items-center mr-8">
-          <div>
-            <Image src="/images/upload1.png" width={350} height={350} alt="Ayush Kumar" className="rounded-2xl translate-y-28" />
+      <div className="w-full pl-3 pt-4 shrink-0 relative z-10">
+        <Link href="/" className="inline-flex items-center">
+          <div className="relative w-[40px] h-[40px]">
+            <Image
+              src="/images/logo orange.png"
+              alt="Lethea"
+              fill
+              className="object-contain"
+              priority
+            />
           </div>
-          <PdfDropzone />
-          <div>
-            <Image src="/images/upload2.png" width={300} height={300} alt="Ayush Kumar" className="rounded-2xl translate-y-25 object-cover" />
+        </Link>
+      </div>
+      <div className="relative z-50">
+        <FloatingDock
+          items={items}
+          desktopClassName="mb-10 fixed -translate-y-1/2"
+          mobileClassName="fixed bottom-6 left-1/2 -translate-x-1/2"
+        />
+      </div>
+
+      <div className="flex-1 min-h-0 flex items-center justify-center pl-10 md:pl-24 pr-6 md:pr-12 overflow-hidden relative z-10">
+        <div className="relative z-10 h-full w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center py-6">
+          <div className="flex h-full w-full flex-col items-center text-center">
+            <div className="shrink-0">
+              <FoldText
+                text="Why just read,"
+                splitBy="char"
+                hinge="top"
+                trigger="mount"
+                duration={0.65}
+                stagger={0.035}
+                ease="power3.out"
+                perspective={700}
+                creaseShading={0.55}
+                fontSize="clamp(2.1rem, 4.6vw, 3.25rem)"
+                fontWeight={800}
+                color="#ffffff"
+                className="font-bebas"
+              />
+            </div>
+
+            <div className="mt-1 flex flex-wrap items-baseline justify-center gap-x-3">
+              <FoldText
+                text="when you can"
+                splitBy="char"
+                hinge="top"
+                trigger="mount"
+                duration={0.65}
+                stagger={0.035}
+                ease="power3.out"
+                perspective={700}
+                creaseShading={0.55}
+                fontSize="clamp(2.1rem, 4.6vw, 3.25rem)"
+                fontWeight={800}
+                color="#ffffff"
+                className="font-bebas"
+              />
+              <FoldText
+                text="chat?"
+                splitBy="char"
+                hinge="top"
+                trigger="mount"
+                duration={0.65}
+                stagger={0.035}
+                ease="power3.out"
+                perspective={700}
+                creaseShading={0.55}
+                fontSize="clamp(2.1rem, 4.6vw, 3.25rem)"
+                fontWeight={800}
+                color="#ff6600"
+                className="font-bebas drop-shadow-[0_0_18px_rgba(255,102,0,0.45)]"
+              />
+            </div>
+
+            {/* Big illustration, below the headline, centered — trimmed a touch off its left edge */}
+            <div className="mt-4 flex w-full min-h-0 flex-1 items-center justify-center overflow-hidden select-none">
+              <video
+                src="/images/in_the_end_remove_that_done_pa.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="h-full max-h-full w-full max-w-full -translate-x-6 object-contain md:-translate-x-10"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-center md:justify-start">
+            <PdfDropzone />
           </div>
         </div>
-        
       </div>
 
       {/* Search Chats Dialog */}
@@ -202,7 +251,7 @@ const Start = () => {
               </DialogTitle>
             </DialogHeader>
             
-            <div className=" custom-scrollbar h-[50vh]  overflow-y-auto space-y-2 mt-1">
+            <div className="custom-scrollbar h-[50vh] overflow-y-auto space-y-2 mt-1">
               {filteredChats?.length > 0 ? (
                 
                 filteredChats.map((chat) => (
@@ -322,7 +371,7 @@ const Start = () => {
   >
     <div
       onClick={(e) => e.stopPropagation()} // ✅ block clicks inside modal
-      className="bg-[#1c1c1c] text-white rounded-xl p-6 w-[400px] shadow-lg border border-[#2b2b2b] relative "
+      className="bg-[#1c1c1c] text-white rounded-xl p-6 w-[90vw] max-w-[400px] shadow-lg border border-[#2b2b2b] relative "
     >
       <h2 className="text-lg font-[Arial] mb-3">Delete Chat?</h2>
       <p className="text-gray-400 font-[Arial] text-sm mb-6">

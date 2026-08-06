@@ -58,27 +58,34 @@ function MyNavbar() {
               <NavbarButton
                 variant="gradient"
                 className="bg-orange-600 font-bold transition-all duration-300
-                           h-[40px] flex items-center justify-center text-white
-                           px-4 rounded-3xl w-auto sm:w-auto truncate
-                           sm:min-w-[120px] sm:max-w-[180px]"
+                           h-[40px] w-[40px] p-0 flex items-center justify-center text-white
+                           rounded-full overflow-hidden shrink-0"
                 title={session.user.name}
               >
-                {/* Full name for large screens */}
-                <span className="hidden sm:inline p-2">
-                  Welcome {session.user.name}
-                </span>
-
-                {/* Circle with initials for small screens */}
-                <span className="sm:hidden flex items-center justify-center bg-orange-600 text-white rounded-full w-[40px] h-[40px] font-bold">
-                  {getInitials(session.user.name)}
-                </span>
+                {session.user.image ? (
+                  <Image
+                    src={session.user.image}
+                    alt={session.user.name || "User avatar"}
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                ) : (
+                  <span className="flex items-center justify-center w-full h-full bg-orange-600 text-white rounded-full font-bold">
+                    {getInitials(session.user.name)}
+                  </span>
+                )}
               </NavbarButton>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent className="bg-black border border-[#ff6600]">
+            <DropdownMenuContent
+              align="end"
+              sideOffset={8}
+              className="bg-black border border-white/10 rounded-lg p-1 min-w-[130px]"
+            >
               <DropdownMenuItem
                 onClick={() => signOut()}
-                className="text-white cursor-pointer"
+                className="text-gray-200 cursor-pointer rounded-md px-3 py-2 text-sm font-[Arial] focus:bg-white/10 focus:text-white hover:bg-white/10 transition-colors"
               >
                 Sign out
               </DropdownMenuItem>

@@ -147,7 +147,7 @@ export const DropzoneEmptyState = ({
   }
 
   return (
-    <div className={cn('flex flex-col items-center justify-center  w-[50vw] ', className)}>
+    <div className={cn('flex flex-col items-center justify-center w-[80vw] sm:w-[60vw] md:w-[50vw] ', className)}>
       <div
         className="flex size-8 items-center justify-center rounded-md bg-muted text-muted-foreground">
         <UploadIcon size={40} />

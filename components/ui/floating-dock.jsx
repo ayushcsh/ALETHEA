@@ -83,11 +83,11 @@ const FloatingDockDesktop = ({ items, className }) => {
   return (
     <div
       className={cn(
-        "fixed left-3 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-6 rounded-2xl bg-[#131313] py-6 px-3 dark:bg-neutral-900 shadow-lg",
+        "fixed left-3 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center rounded-full bg-[#131313] border border-white/10 py-4 px-2.5 dark:bg-neutral-900 shadow-lg",
         className
       )}
     >
-      <div className="flex flex-col items-center gap-5 relative">
+      <div className="flex flex-col items-center gap-3 relative">
         {items.map((item) => (
           <IconContainer key={item.title} {...item} />
         ))}
@@ -125,7 +125,7 @@ function IconContainer({ title, icon, href, onClick }) {
       <motion.div
         whileHover={{ scale: 1.15 }}
         transition={{ type: "spring", stiffness: 300, damping: 15 }}
-        className="text-white hover:text-[#ff7b00] transition-colors duration-150 text-[26px]"
+        className="text-white hover:text-[#ff7b00] transition-colors duration-150 text-[18px]"
       >
         {icon}
       </motion.div>

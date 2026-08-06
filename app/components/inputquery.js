@@ -198,11 +198,11 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-between h-[97.5vh] w-[99%]">
+    <div className="flex flex-col h-full w-[99%]">
       {/* Messages */}
       <div
         ref={scrollRef}
-        className="h-[87vh] w-[140%] translate-x-[-10px] md:translate-x-0 md:w-[99%] ml-[10px] custom-scrollbar overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-white"
+        className="flex-1 min-h-0 w-full px-2 md:px-0 md:w-[99%] md:ml-[10px] pb-4 custom-scrollbar overflow-y-auto"
       >
         {chat.length === 0 && (
           <div className="flex items-center justify-center h-full">
@@ -218,7 +218,7 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
             return (
               <div key={index} className="flex flex-col mt-[20px]">
                 {item.query && (
-                  <div className="self-end bg-white max-w-[40%] rounded-[10px] right-7 p-2 font-[Arial] shadow">
+                  <div className="self-end bg-white max-w-[85%] sm:max-w-[70%] md:max-w-[40%] rounded-[10px] right-7 p-2 font-[Arial] shadow">
                     <p className="text-black text-[16px]">{item.query}</p>
                   </div>
                 )}
@@ -226,12 +226,12 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
                   <div className="relative max-w-[98%] w-fit rounded-[15px] p-2 font-[Arial] mb-6">
                     {item.isLoading ? (
                       <div className="flex items-center gap-2 mb-2">
-                        <Loader2 className="h-6 w-6 animate-spin text-white bg-[#262626] rounded-2xl" />
+                        <Loader2 className="h-6 w-6 animate-spin text-white bg-black rounded-2xl" />
                         <span className="text-gray-400">Thinking...</span>
                       </div>
                     ) : item.type === "flashcards" ? (
                       <div className="w-full max-w-2xl mx-auto mt-[10px]">
-                        <Carousel className="w-[53vw]" opts={{ align: "start", loop: true }}>
+                        <Carousel className="w-[85vw] sm:w-[75vw] md:w-[53vw]" opts={{ align: "start", loop: true }}>
                           <CarouselContent className="-ml-1">
                             {item.answer?.map((card, i) => (
                               <CarouselItem key={i} className="pl-4 md:basis-1/2 lg:basis-1/3">
@@ -260,12 +260,8 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
                       </div>
                     ) : (
                       <div className="relative">
-                        <div className="relative inline-block">
-                          <Image src="/images/cat.png" alt="cat" width={200} height={200} className="absolute left-[-70px] top-[-40px] z-0 opacity-80" />
-
-                          <div className="relative z-10 inline-block w-fit max-w-[65vw] bg-[#262626] text-white text-[16px] rounded-[15px] p-2 pr-2 font-[Arial] break-words">
-                            <ReactMarkdown>{item.answer}</ReactMarkdown>
-                          </div>
+                        <div className="inline-block w-fit max-w-[85vw] sm:max-w-[75vw] md:max-w-[65vw] bg-black text-white text-[16px] rounded-[15px] p-2 pr-2 font-[Arial] break-words">
+                          <ReactMarkdown>{item.answer}</ReactMarkdown>
                         </div>
 
                         {/* Copy / Share / Download Buttons + Source */}
@@ -317,9 +313,9 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
                                         <p>{(item.query || chat.slice(0, index).reverse().find((msg) => msg.query)?.query || "").split(" ").slice(0, 3).join(" ") || "Untitled Chat"}...</p>
                                         <button onClick={() => setShareOpen(null)}>X</button>
                                       </div>
-                                      <div className="w-[450px] h-[1px] mt-[20px] bg-white "></div>
+                                      <div className="w-full max-w-[450px] h-[1px] mt-[20px] bg-white "></div>
 
-                                      <div className="w-[450px] h-[550px] mt-[20px] flex flex-col items-center">
+                                      <div className="w-full max-w-[450px] h-auto max-h-[60vh] mt-[20px] flex flex-col items-center">
                                         <Image src="/images/sharchat.png" alt="Share Preview" width={500} height={200} className="object-cover max-h-[60%] object-top rounded-lg mb-6" />
 
                                         <div className=" text-center">
@@ -362,7 +358,7 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
       </div>
 
       {/* Input area */}
-      <div className="flex justify-center items-center w-full bottom-10 fixed">
+      <div className="flex justify-center items-center w-full shrink-0 py-3">
         <div className="flex">
           <PlaceholdersAndVanishInput
             placeholders={[
@@ -374,11 +370,11 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
               ${chat.length === 0 ? " translate-y-[-320px] md:translate-y-[-240px]" : "translate-y-0"}
               ${
                 showNotepad && showPDF
-                  ? "w-[36.5vw]"
+                  ? "w-[88vw] md:w-[36.5vw]"
                   : showNotepad && !showPDF
-                  ? "w-[55vw]"
+                  ? "w-[88vw] md:w-[55vw]"
                   : !showNotepad && showPDF
-                  ? "w-[59vw]"
+                  ? "w-[88vw] md:w-[59vw]"
                   : "w-[88vw] md:w-[70vw]"
               }`}
             value={input}
@@ -386,6 +382,7 @@ const InputQuery = ({ chatId, showNotepad, showPDF }) => {
             onKeyDown={handleKeyDown}
             onSubmit={() => handlesend()}
             chatlength={chat.length}
+            chatId={chatId}
           />
         </div>
       </div>

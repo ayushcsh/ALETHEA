@@ -31,33 +31,33 @@ export default function Notepad() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center bg-[#0e0e0e] p-2 rounded-2xl shadow-lg max-w-[48vw] min-h-[95vh]">
-      <h2 className="text-lg font-semibold mb-4 text-white">📝 Notepad</h2>
+    <div className="flex flex-col h-full w-full p-3 gap-3">
+      <h2 className="text-sm font-medium text-gray-300 shrink-0">Notepad</h2>
 
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Write your thoughts here..."
-        className="w-full h-[77vh] bg-[#1a1a1a] text-gray-200 p-3 rounded-lg resize-none outline-none font-[Arial]"
+        className="flex-1 min-h-0 w-full bg-[#1a1a1a] text-gray-200 p-3 rounded-lg resize-none outline-none font-[Arial]"
       />
 
-      <div className="flex justify-between w-full mt-4">
+      <div className="flex justify-between items-center w-full shrink-0">
         <Button
           onClick={handleSave}
-          className="bg-[#222] z-50  hover:bg-[#333] text-white flex items-center gap-2"
+          className="bg-[#222] hover:bg-[#333] text-white flex items-center gap-2"
         >
           <Save size={16}/> Save
         </Button>
         <Button
           onClick={handleDownload}
-          className="bg-[#d13902] z-50 hover:bg-[#e64b0a] text-white flex items-center gap-2"
+          className="bg-[#d13902] hover:bg-[#e64b0a] text-white flex items-center gap-2"
         >
           <Download size={16} /> Download
         </Button>
       </div>
 
       {saved && (
-        <p className="text-green-500  text-sm">✅ Saved locally!</p>
+        <p className="text-green-500 text-sm shrink-0">Saved locally!</p>
       )}
     </div>
   );

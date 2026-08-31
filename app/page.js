@@ -14,28 +14,10 @@ export default function Home() {
 
   return (
     <>
-      <div className="fixed inset-0 z-0">
-        <CursorGrid
-          cellSize={56}
-          color="#ff6600"
-          radius={160}
-          falloff="smooth"
-          holdTime={400}
-          fadeDuration={800}
-          lineWidth={1}
-          maxOpacity={0.5}
-          fillOpacity={0.05}
-          gridOpacity={0.08}
-          cellRadius={6}
-          clickPulse
-          pulseSpeed={600}
-        />
-      </div>
-
       <div className="relative z-10">
      <MyNavbar/>
       <section id="home">
-      <div className="home justify-center items-center flex   h-[44vh] md:h-[80vh] w-full  mt-[30px] ">
+      <div className="home flex w-full items-center justify-center">
 
         <Mainpageanimation/>
 
@@ -45,9 +27,28 @@ export default function Home() {
         {/* </div> */}
       </div>
       </section>
-      <div className="h-[50px] w-[146px] bg-black translate-x-[1300px] mt-[30px] translate-y-10 relative"></div>
+      </div>
 
-      <section id="features">
+      <div className="relative">
+        <div className="absolute inset-0 z-0">
+          <CursorGrid
+            cellSize={56}
+            color="#ff6600"
+            radius={160}
+            falloff="smooth"
+            holdTime={400}
+            fadeDuration={800}
+            lineWidth={1}
+            maxOpacity={0.5}
+            fillOpacity={0.05}
+            gridOpacity={0.08}
+            cellRadius={6}
+            clickPulse
+            pulseSpeed={600}
+          />
+        </div>
+        <div className="relative z-10">
+      <section id="features" className="relative">
       <Cards
         tittle="Annotate your documents w. ease"
         description="Highlight text or areas, listen with text-to-speech, and stay focused while reading."
@@ -84,6 +85,7 @@ export default function Home() {
        <div className="mb-[100px]"></div>
 
        <AboutPage/>
+      </div>
       </div>
     </>
   );

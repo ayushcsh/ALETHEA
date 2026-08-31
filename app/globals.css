@@ -241,3 +241,111 @@ body {
   scrollbar-color: white black;
 }
 
+/* Static, focused authentication layout */
+.login-page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background: radial-gradient(700px circle at 12% 92%, rgb(255 92 0 / 20%), transparent 58%), radial-gradient(520px circle at 93% 45%, rgb(245 102 0 / 9%), transparent 58%), #000;
+}
+
+.login-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(360px, 1.15fr);
+  width: min(1024px, 100%);
+  min-height: 630px;
+  padding: 28px;
+  gap: clamp(2rem, 7vw, 7rem);
+  background: rgb(10 10 10 / 42%);
+  border: 1px solid rgb(255 255 255 / 14%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 12%), 0 28px 80px rgb(0 0 0 / 64%), 0 18px 55px rgb(245 102 0 / 14%);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  border-radius: 28px;
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  right: -110px;
+  bottom: -150px;
+  width: 360px;
+  height: 360px;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(245 102 0 / 16%), transparent 68%);
+  filter: blur(16px);
+}
+
+.login-card::after {
+  display: none;
+}
+
+/* Hero arc: stays full-width and moves with a slow, restrained light pulse. */
+.hero-orange-arc {
+  object-fit: contain;
+  object-position: center bottom;
+  transform-origin: center bottom;
+  animation: hero-arc-pulse 5s cubic-bezier(.45, 0, .55, 1) infinite;
+  filter: drop-shadow(0 -8px 24px rgb(255 102 0 / 18%));
+}
+
+@keyframes hero-arc-pulse {
+  0%, 100% { transform: translateY(110px); filter: brightness(1) drop-shadow(0 -8px 24px rgb(255 102 0 / 16%)); }
+  50% { transform: translateY(110px); filter: brightness(1.12) drop-shadow(0 -10px 34px rgb(255 102 0 / 34%)); }
+}
+
+.hero-arc-aura {
+  position: absolute;
+  z-index: 0;
+  bottom: -24rem;
+  left: 50%;
+  width: min(110vw, 1200px);
+  height: 34rem;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgb(255 102 0 / 20%) 0%, rgb(255 102 0 / 6%) 38%, transparent 70%);
+  filter: blur(20px);
+  animation: hero-aura-pulse 5s ease-in-out infinite;
+}
+
+.hero-copy { padding-top: clamp(.5rem, 1.5vh, 1rem); }
+
+@keyframes hero-aura-pulse {
+  0%, 100% { opacity: .45; transform: translateX(-50%) scale(.96); }
+  50% { opacity: .9; transform: translateX(-50%) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-orange-arc, .hero-arc-aura { animation: none; }
+}
+
+.login-showcase {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  min-height: 574px;
+  padding: 0;
+  border-radius: 24px;
+  background: #000;
+}
+
+.login-poster { object-fit: cover; object-position: center; }
+
+.login-form-panel { position: relative; z-index: 1; display: grid; place-items: center; padding: 2rem 2rem 2rem 0; }
+.login-form { width: min(380px, 100%); color: #fff; }
+.login-mark { color: #f56600; font-size: 2.9rem; line-height: 1; }
+.login-form h2 { margin: 1.2rem 0 .4rem; font-family: Arial, sans-serif; font-size: 2.5rem; letter-spacing: -.06em; font-weight: 500; }
+.login-form > p { margin: 0; color: rgb(255 255 255 / 62%); font-family: Arial, sans-serif; font-size: .96rem; }
+.login-divider { height: 1px; margin: 2.2rem 0; background: rgb(255 255 255 / 18%); }
+.oauth-button { width: 100%; min-height: 56px; display: flex; align-items: center; justify-content: center; gap: .75rem; margin-top: .9rem; border: 1px solid rgb(255 255 255 / 25%); border-radius: 9px; background: rgb(255 255 255 / 10%); color: #fff; font: 600 1rem Arial, sans-serif; cursor: pointer; transition: background-color .18s ease, border-color .18s ease; }
+.oauth-button:hover { border-color: #f56600; background: rgb(245 102 0 / 18%); }.oauth-button svg { width: 22px; height: 22px; }.github-button { background: #f56600; border-color: #f56600; color: white; }.github-button:hover { background: #d95300; border-color: #d95300; }
+.login-form .login-help { margin-top: 1.25rem; text-align: center; font-size: .78rem; line-height: 1.4; }
+
+@media (max-width: 720px) { .login-page { padding: 1rem; }.login-card { grid-template-columns: 1fr; min-height: auto; padding: 14px; gap: 0; border-radius: 22px; }.login-showcase { min-height: 250px; border-radius: 16px; }.login-form-panel { padding: 2.5rem 1rem 1.5rem; }.login-form h2 { font-size: 2.15rem; } }
+
